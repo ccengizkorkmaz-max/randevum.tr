@@ -99,7 +99,12 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
 
             const formattedDate = format(date, "d MMMM yyyy", { locale: tr });
             const staffInfo = selectedStaff ? ` uzman: ${selectedStaff.name}` : "";
-            const message = `Randevum.tr: Yeni Randevu! Müşteri: ${name}, Hizmet: ${service.title}${staffInfo}, Tarih: ${formattedDate}, Saat: ${time}`;
+            const confirmLink = `${window.location.origin}/confirm/${result.data.id}`;
+
+            const message = `Randevum.tr: Yeni Randevu! Müşteri: ${name}, Hizmet: ${service.title}${staffInfo}, Tarih: ${formattedDate}, Saat: ${time}
+            
+Hızlı Onay Linki:
+${confirmLink}`;
             const encodedMessage = encodeURIComponent(message);
 
             // WhatsApp için numarayı düzenliyoruz
