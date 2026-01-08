@@ -21,6 +21,7 @@ interface Appointment {
     time: string;
     rawDate: string;
     staffName?: string | null;
+    status: 'pending' | 'confirmed' | 'cancelled' | 'no_show';
     customerStats?: { cancelled: number; noShow: number };
 }
 
