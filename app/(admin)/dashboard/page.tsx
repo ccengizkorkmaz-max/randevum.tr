@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
                 staff ( name )
             `)
             .eq('user_id', user.id)
-            .order('start_time', { ascending: true }),
+            .order('start_time', { ascending: false }),
         supabase
             .from('profiles')
             .select('*')

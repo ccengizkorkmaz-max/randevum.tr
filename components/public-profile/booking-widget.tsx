@@ -213,7 +213,16 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
                                         }
                                     }
 
+                                    const now = new Date();
+                                    const isTodayDate = date && date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+                                    const currentHour = now.getHours();
+                                    const currentMinute = now.getMinutes();
+
                                     return slots.map((slot) => {
+                                        // Geçmiş Zaman Kontrolü
+                                        const [slotH, slotM] = slot.split(':').map(Number);
+                                        const isPast = isTodayDate && (slotH < currentHour || (slotH === currentHour && slotM <= currentMinute));
+
                                         // Çakışma Kontrolü (Seçilen hizmet süresini dikkate alır)
                                         const isBusy = busySlots.some(busy => {
                                             // 1. Slotun kendisi mevcut bir randevunun içinde mi?
@@ -241,16 +250,19 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
                                             return false;
                                         });
 
+                                        const isDisabled = isBusy || isPast;
+
                                         return (
                                             <Button
                                                 key={slot}
                                                 variant={time === slot ? "default" : "outline"}
                                                 onClick={() => setTime(slot)}
-                                                className={`w-full ${isBusy ? "opacity-40 cursor-not-allowed bg-zinc-50 text-zinc-300 border-zinc-100" : ""}`}
-                                                disabled={isBusy}
+                                                className={`w-full ${isDisabled ? "opacity-40 cursor-not-allowed bg-zinc-50 text-zinc-300 border-zinc-100" : ""}`}
+                                                disabled={isDisabled}
                                             >
                                                 {slot}
                                                 {isBusy && <span className="ml-1 text-[8px] font-bold block">(DOLU)</span>}
+                                                {!isBusy && isPast && <span className="ml-1 text-[8px] font-bold block">(-)</span>}
                                             </Button>
                                         );
                                     });
