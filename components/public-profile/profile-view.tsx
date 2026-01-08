@@ -42,7 +42,7 @@ export function ProfileView({ profile, services, staff }: ProfileViewProps) {
     const [selectedService, setSelectedService] = useState<Service | null>(null);
 
     return (
-        <div className="max-w-md mx-auto min-h-screen bg-white shadow-xl overflow-hidden flex flex-col">
+        <div className="max-w-md md:max-w-4xl mx-auto min-h-screen bg-white shadow-xl overflow-hidden flex flex-col">
             <div className="bg-gradient-to-b from-zinc-100 to-white pb-6 pt-10">
                 <BioCard
                     businessName={profile.businessName}

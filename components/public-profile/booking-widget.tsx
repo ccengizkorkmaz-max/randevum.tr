@@ -80,7 +80,8 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
             const endDateTime = addMinutes(startDateTime, service.duration);
 
             // Veritabanına kaydet
-            await createAppointment({
+            // Veritabanına kaydet
+            const result = await createAppointment({
                 userId,
                 serviceId: service.id,
                 staffId: selectedStaff?.id || null,
@@ -89,6 +90,12 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
                 startTime: startDateTime.toISOString(),
                 endTime: endDateTime.toISOString(),
             });
+
+            if (!result.success) {
+                toast.error(result.error);
+                setLoading(false);
+                return;
+            }
 
             const formattedDate = format(date, "d MMMM yyyy", { locale: tr });
             const staffInfo = selectedStaff ? ` uzman: ${selectedStaff.name}` : "";

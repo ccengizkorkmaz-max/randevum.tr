@@ -13,31 +13,31 @@ interface BioCardProps {
 
 export function BioCard({ businessName, bio, avatarUrl, coverUrl, address, locationUrl }: BioCardProps) {
     return (
-        <div className="flex flex-col items-center text-center pb-6 space-y-4 relative">
+        <div className="flex flex-col items-center text-center pb-2 space-y-2 relative">
             <div
-                className="absolute top-0 left-0 w-full h-32 bg-cover bg-center z-0"
+                className="absolute top-0 left-0 w-full h-20 bg-cover bg-center z-0"
                 style={{
                     backgroundImage: coverUrl ? `url(${coverUrl})` : 'none',
                     backgroundColor: coverUrl ? 'transparent' : '#f3f4f6'
                 }}
             />
-            <div className="z-10 mt-16">
-                <Avatar className="w-32 h-32 border-4 border-white shadow-xl">
+            <div className="z-10 mt-10">
+                <Avatar className="w-20 h-20 border-4 border-white shadow-md">
                     <AvatarImage src={avatarUrl || ""} alt={businessName} className="object-cover" />
-                    <AvatarFallback className="text-3xl bg-primary text-primary-foreground font-bold">
+                    <AvatarFallback className="text-xl bg-primary text-primary-foreground font-bold">
                         {businessName.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
             </div>
-            <div className="px-6 space-y-3">
-                <h1 className="text-2xl font-bold tracking-tight">{businessName}</h1>
-                {bio && <p className="text-muted-foreground text-sm leading-relaxed">{bio}</p>}
+            <div className="px-4 space-y-1">
+                <h1 className="text-xl font-bold tracking-tight">{businessName}</h1>
+                {bio && <p className="text-muted-foreground text-xs leading-snug line-clamp-2">{bio}</p>}
 
                 {(address || locationUrl) && (
-                    <div className="flex flex-col items-center gap-2 pt-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                         {address && (
-                            <div className="flex items-center gap-1.5 text-zinc-500 text-xs">
-                                <MapPin className="w-3.5 h-3.5 text-primary" />
+                            <div className="flex items-center gap-1 text-zinc-500 text-[10px]">
+                                <MapPin className="w-3 h-3 text-primary" />
                                 <span>{address}</span>
                             </div>
                         )}
@@ -46,10 +46,10 @@ export function BioCard({ businessName, bio, avatarUrl, coverUrl, address, locat
                                 href={locationUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center h-8 px-4 rounded-full text-xs font-medium gap-1.5 border border-zinc-200 hover:bg-zinc-50 transition-colors"
+                                className="inline-flex items-center justify-center h-6 px-3 rounded-full text-[10px] font-medium gap-1 border border-zinc-200 hover:bg-zinc-50 transition-colors"
                             >
-                                <ExternalLink className="w-3 h-3" />
-                                Konumu Gör
+                                <ExternalLink className="w-2.5 h-2.5" />
+                                Konum
                             </a>
                         )}
                     </div>

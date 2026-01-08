@@ -11,60 +11,66 @@ export async function createAppointment(data: {
     startTime: string;
     endTime: string;
 }) {
-    const supabase = await createClient()
+    try {
+        const supabase = await createClient()
 
-    // 1. Müşteriyi bul veya oluştur
-    const { data: existingCustomer } = await supabase
-        .from('customers')
-        .select('id')
-        .eq('user_id', data.userId)
-        .eq('phone', data.customerPhone)
-        .maybeSingle()
-
-    let customerId = existingCustomer?.id
-
-    if (!customerId) {
-        const { data: newCustomer, error: customerError } = await supabase
+        // 1. Müşteriyi bul veya oluştur
+        const { data: existingCustomer } = await supabase
             .from('customers')
+            .select('id')
+            .eq('user_id', data.userId)
+            .eq('phone', data.customerPhone)
+            .maybeSingle()
+
+        let customerId = existingCustomer?.id
+
+        if (!customerId) {
+            const { data: newCustomer, error: customerError } = await supabase
+                .from('customers')
+                .insert({
+                    user_id: data.userId,
+                    name: data.customerName,
+                    phone: data.customerPhone,
+                })
+                .select('id')
+                .single()
+
+            if (customerError) {
+                console.error("Müşteri oluşturma hatası:", customerError)
+                // RLS hatası olabilir, devam edelim ama customer_id olmadan
+            } else {
+                customerId = newCustomer.id
+            }
+        }
+
+        // 2. Randevuyu oluştur
+        const { data: appointment, error } = await supabase
+            .from('appointments')
             .insert({
                 user_id: data.userId,
-                name: data.customerName,
-                phone: data.customerPhone,
+                service_id: data.serviceId,
+                staff_id: data.staffId,
+                customer_name: data.customerName,
+                customer_phone: data.customerPhone,
+                start_time: data.startTime,
+                end_time: data.endTime,
+                status: 'pending',
+                customer_id: customerId // İlişkilendirme
             })
-            .select('id')
+            .select()
             .single()
 
-        if (customerError) {
-            console.error("Müşteri oluşturma hatası:", customerError)
-            // Kritik hata olmasın, randevuyu yine de kaydedelim (ama customer_id olmadan)
-        } else {
-            customerId = newCustomer.id
+        if (error) {
+            console.error("Kayıt Hatası:", error)
+            return { success: false, error: "Randevu kaydedilemedi: " + error.message }
         }
+
+        return { success: true, data: appointment }
+
+    } catch (error: any) {
+        console.error("Server Action Exception:", error)
+        return { success: false, error: "Beklenmeyen hata: " + error.message }
     }
-
-    // 2. Randevuyu oluştur
-    const { data: appointment, error } = await supabase
-        .from('appointments')
-        .insert({
-            user_id: data.userId,
-            service_id: data.serviceId,
-            staff_id: data.staffId,
-            customer_name: data.customerName,
-            customer_phone: data.customerPhone,
-            start_time: data.startTime,
-            end_time: data.endTime,
-            status: 'pending',
-            customer_id: customerId // İlişkilendirme
-        })
-        .select()
-        .single()
-
-    if (error) {
-        console.error("Kayıt Hatası:", error)
-        throw new Error("Randevu kaydedilemedi: " + error.message)
-    }
-
-    return appointment
 }
 
 export async function getBookedSlots(userId: string, staffId: string | null, dateStr: string) {
