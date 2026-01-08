@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient, createClient } from '@/utils/supabase/server'
 
 export async function createAppointment(data: {
     userId: string;
@@ -12,7 +12,7 @@ export async function createAppointment(data: {
     endTime: string;
 }) {
     try {
-        const supabase = await createClient()
+        const supabase = await createAdminClient()
 
         // 1. Müşteriyi bul veya oluştur
         const { data: existingCustomer } = await supabase
