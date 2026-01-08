@@ -1,17 +1,12 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 
 export async function updateAppointmentStatus(appointmentId: string, status: 'confirmed' | 'cancelled') {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
 
-    // 1. Yetki Kontrolü
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-        throw new Error('Unauthorized')
-    }
+    // Auth kontrolü kaldırıldı - Linke sahip olan onaylayabilir
 
     // 2. Güncelleme
     const { error } = await supabase

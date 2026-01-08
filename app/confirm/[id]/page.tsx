@@ -11,11 +11,7 @@ export default async function ConfirmPage({ params }: { params: Promise<{ id: st
     const resolvedParams = await params;
     const supabase = await createClient()
 
-    // 1. Auth Kontrolü
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-        redirect(`/login?next=/confirm/${resolvedParams.id}`)
-    }
+    // Auth kontrolü kaldırıldı (WhatsApp linki için)
 
     // 2. Randevu Detaylarını Çek
     const { data: appointment } = await supabase
