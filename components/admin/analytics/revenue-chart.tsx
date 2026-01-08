@@ -34,7 +34,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
                             tickFormatter={(value) => `₺${value}`}
                         />
                         <Tooltip
-                            formatter={(value: any) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Number(value))}
+                            formatter={(value: number | undefined) => value !== undefined ? new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(value) : ''}
                             contentStyle={{ borderRadius: '8px' }}
                         />
                         <Bar dataKey="total" fill="currentColor" radius={[4, 4, 0, 0]} className="fill-primary" />
