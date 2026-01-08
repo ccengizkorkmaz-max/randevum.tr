@@ -109,3 +109,22 @@ export async function getBookedSlots(userId: string, staffId: string | null, dat
         end: new Date(app.end_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
     }))
 }
+
+export async function checkCustomerExists(userId: string, phone: string) {
+    const supabase = await createAdminClient()
+
+    // Numarayı normalize et
+    let cleanPhone = phone.replace(/\D/g, '')
+    // Basit karşılaştırma için son 10 haneyi kontrol edebiliriz veya tam eşleşme
+    // Veritabanında nasıl kayıtlı olduğuna bağlı. Şimdilik tam eşleşme arayalım.
+    // Ancak BookingWidget'tan gelen format ile DB formatı aynı olmalı.
+
+    const { data } = await supabase
+        .from('customers')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('phone', phone) // Widget'tan gelen format +90...
+        .maybeSingle()
+
+    return !!data
+}

@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { createAppointment, getBookedSlots } from "@/app/(public)/booking-actions";
+import { createAppointment, getBookedSlots, checkCustomerExists } from "@/app/(public)/booking-actions";
 import { addMinutes, setHours, setMinutes } from "date-fns";
 import { useEffect } from "react";
 
@@ -78,9 +78,55 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
             const [hours, minutes] = time.split(":").map(Number);
             const startDateTime = setMinutes(setHours(date, hours), minutes);
             const endDateTime = addMinutes(startDateTime, service.duration);
+            const formattedDate = format(date, "d MMMM yyyy", { locale: tr });
+            const staffInfo = selectedStaff ? ` uzman: ${selectedStaff.name}` : "";
 
-            // Veritabanına kaydet
-            // Veritabanına kaydet
+            // 1. Müşteri Kontrolü
+            const isExistingCustomer = await checkCustomerExists(userId, phone);
+
+            if (!isExistingCustomer) {
+                // --- YENİ MÜŞTERİ AKIŞI ---
+
+                const approvalData = new URLSearchParams({
+                    userId,
+                    serviceId: service.id,
+                    staffId: selectedStaff?.id || "",
+                    customerName: name,
+                    customerPhone: phone,
+                    startTime: startDateTime.toISOString(),
+                    endTime: endDateTime.toISOString(),
+                }).toString();
+
+                const approvalLink = `${window.location.origin}/approve-new?${approvalData}`;
+
+                const message = `Randevum.tr: *YENİ MÜŞTERİ* Randevu İsteği!
+Müşteri: ${name}
+Telefon: ${phone}
+Hizmet: ${service.title}${staffInfo}
+Tarih: ${formattedDate} Saat: ${time}
+
+Bu müşteri ilk kez randevu alıyor. Onaylamak ve oluşturmak için:
+${approvalLink}`;
+
+                const encodedMessage = encodeURIComponent(message);
+
+                let cleanPhone = businessPhone.replace(/\D/g, '');
+                if (cleanPhone.startsWith('0')) cleanPhone = '90' + cleanPhone.substring(1);
+                else if (cleanPhone.startsWith('5')) cleanPhone = '90' + cleanPhone;
+
+                const whatsappLink = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+
+                toast.info("Yeni müşteri olduğunuz için onay isteği iletiliyor...");
+
+                setTimeout(() => {
+                    window.location.href = whatsappLink;
+                }, 1500);
+
+                setLoading(false);
+                return;
+            }
+
+            // --- MEVCUT MÜŞTERİ AKIŞI ---
             const result = await createAppointment({
                 userId,
                 serviceId: service.id,
@@ -97,10 +143,7 @@ export function BookingWidget({ service, businessPhone, userId, staff }: Booking
                 return;
             }
 
-            const formattedDate = format(date, "d MMMM yyyy", { locale: tr });
-            const staffInfo = selectedStaff ? ` uzman: ${selectedStaff.name}` : "";
             const confirmLink = `${window.location.origin}/confirm/${result.data.id}`;
-
             const message = `Randevum.tr: Yeni Randevu! Müşteri: ${name}, Hizmet: ${service.title}${staffInfo}, Tarih: ${formattedDate}, Saat: ${time}
             
 Hızlı Onay Linki:
