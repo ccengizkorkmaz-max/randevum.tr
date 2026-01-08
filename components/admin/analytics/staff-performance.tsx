@@ -45,7 +45,8 @@ export function StaffPerformance({ data }: StaffPerformanceProps) {
                             axisLine={false}
                         />
                         <Tooltip
-                            formatter={(value: any, name: string) => {
+                            // @ts-ignore
+                            formatter={(value: any, name: any) => {
                                 if (name === 'revenue') return [new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Number(value) || 0), 'Gelir']
                                 return [value, 'Randevu']
                             }}
