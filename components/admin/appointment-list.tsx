@@ -56,11 +56,15 @@ export function AppointmentList({ appointments }: AppointmentListProps) {
         });
     }, [appointments, filter, statusFilter]);
 
-    const handleStatusUpdate = async (id: string, status: 'confirmed' | 'cancelled' | 'no_show') => {
+    const handleStatusUpdate = async (id: string, status: 'confirmed' | 'cancelled' | 'no_show', app?: Appointment) => {
         setLoadingId(id + status);
         try {
             await updateAppointmentStatus(id, status);
             toast.success(status === 'confirmed' ? "Randevu onaylandı." : status === 'no_show' ? "Durum 'Gelmedi' olarak güncellendi." : "Randevu iptal edildi.");
+
+            if (status === 'confirmed' && app) {
+                sendNotification({ ...app, status: 'confirmed' });
+            }
         } catch (error: any) {
             toast.error("Hata: " + error.message);
         } finally {
@@ -287,7 +291,7 @@ export function AppointmentList({ appointments }: AppointmentListProps) {
                                                         size="sm"
                                                         variant="outline"
                                                         className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
-                                                        onClick={() => handleStatusUpdate(app.id, 'confirmed')}
+                                                        onClick={() => handleStatusUpdate(app.id, 'confirmed', app)}
                                                         disabled={!!loadingId}
                                                         title="Onayla"
                                                     >

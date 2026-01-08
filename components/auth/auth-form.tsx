@@ -50,7 +50,10 @@ export function AuthForm({ className, type, onSubmitAction, ...props }: AuthForm
 
         try {
             await onSubmitAction(values)
-        } catch (err: unknown) {
+        } catch (err: any) {
+            if (err.message.includes('NEXT_REDIRECT')) {
+                return;
+            }
             if (err instanceof Error) {
                 setError(err.message)
             } else {
