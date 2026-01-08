@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -9,7 +9,7 @@ import { ConfirmationButtons } from './confirmation-buttons' // Client Component
 
 export default async function ConfirmPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
 
     // Auth kontrolü kaldırıldı (WhatsApp linki için)
 
