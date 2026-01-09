@@ -11,7 +11,7 @@ export async function login(formData: { email: string, password: string }) {
     const { error } = await supabase.auth.signInWithPassword(formData)
 
     if (error) {
-        throw new Error("Giriş başarısız: " + error.message)
+        throw new Error("Kullanıcı adınız ya da şifrenizi kontrol ederek tekrar deneyiniz.")
     }
 
     revalidatePath('/', 'layout')
