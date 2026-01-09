@@ -15,13 +15,13 @@ export function BioCard({ businessName, bio, avatarUrl, coverUrl, address, locat
     return (
         <div className="flex flex-col items-center text-center pb-2 space-y-2 relative">
             <div
-                className="absolute top-0 left-0 w-full h-20 bg-cover bg-center z-0"
+                className="absolute top-0 left-0 w-full h-[120px] md:h-[200px] bg-cover bg-center z-0"
                 style={{
                     backgroundImage: coverUrl ? `url(${coverUrl})` : 'none',
                     backgroundColor: coverUrl ? 'transparent' : '#f3f4f6'
                 }}
             />
-            <div className="z-10 mt-10">
+            <div className="z-10 mt-[80px] md:mt-[160px]">
                 <Avatar className="w-20 h-20 border-4 border-white shadow-md">
                     <AvatarImage src={avatarUrl || ""} alt={businessName} className="object-cover" />
                     <AvatarFallback className="text-xl bg-primary text-primary-foreground font-bold">
