@@ -55,7 +55,7 @@ export async function signup(formData: { email: string, password: string }) {
 
                     <p>Hemen başlamak için yönetim panelinize gidin:</p>
                     <p>
-                        <a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Yönetim Paneline Git</a>
+                        <a href="${process.env.NEXT_PUBLIC_SITE_URL}/login" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Yönetim Paneline Git</a>
                     </p>
 
                     <p>Sorularınız olursa bu e-postaya yanıt verebilirsiniz.</p>
