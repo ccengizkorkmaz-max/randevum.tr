@@ -143,6 +143,9 @@ export default async function AdminDashboard() {
                     </div>
 
                     <div className="flex items-center gap-3">
+                        <div className="hidden md:block text-xs text-red-500 font-mono border border-red-200 p-1 rounded bg-red-50">
+                            Debug: Role={profile.role || 'null'} | Email={user.email}
+                        </div>
                         <LogoutButton />
                         {profile?.avatar_url && (
                             <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-background shadow-md">
