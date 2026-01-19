@@ -164,6 +164,19 @@ export default async function AdminDashboard() {
                     <TabsTrigger value="profile">Profil Ayarları</TabsTrigger>
                     <TabsTrigger value="availability">Çalışma Saatleri</TabsTrigger>
                 </TabsList>
+
+                {profile.role === 'admin' && (
+                    <div className="mb-6 bg-zinc-900 text-white p-4 rounded-lg flex items-center justify-between">
+                        <div>
+                            <h3 className="font-bold">Admin Paneli</h3>
+                            <p className="text-sm text-zinc-400">Tüm kullanıcıları yönetin</p>
+                        </div>
+                        <a href="/admin/profiles" className="bg-white text-zinc-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-zinc-100">
+                            Panele Git
+                        </a>
+                    </div>
+                )}
+
                 <TabsContent value="appointments">
                     <AppointmentList appointments={appointments} />
                 </TabsContent>
