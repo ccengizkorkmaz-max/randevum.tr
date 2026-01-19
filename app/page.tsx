@@ -47,7 +47,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Ücretsiz Deneme</span>
+              <span>Tamamen <strong>BEDAVA</strong></span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-primary" />

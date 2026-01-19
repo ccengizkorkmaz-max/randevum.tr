@@ -24,6 +24,10 @@ export async function signup(formData: { email: string, password: string }) {
     const { error } = await supabase.auth.signUp(formData)
 
     if (error) {
+        console.error("Signup error:", error)
+        if (error.message.includes("is invalid")) {
+            throw new Error("Kayıt başarısız: Geçerli bir e-posta adresi giriniz. Ya da bu e-posta ile daha önce kayıt oldunuz ise hesabınıza giriş yapın!")
+        }
         throw new Error("Kayıt başarısız: " + error.message)
     }
 
