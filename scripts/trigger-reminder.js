@@ -1,6 +1,6 @@
 async function trigger() {
     try {
-        const response = await fetch('http://localhost:3000/api/cron/reminders', {
+        const response = await fetch('https://www.randevumtr.com/api/cron/reminders', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

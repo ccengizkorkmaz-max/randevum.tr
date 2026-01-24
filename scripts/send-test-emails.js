@@ -2,7 +2,7 @@ const { Resend } = require('resend');
 require('dotenv').config({ path: '.env.local' });
 
 const resendApiKey = process.env.RESEND_API_KEY;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:1001';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.randevumtr.com';
 
 if (!resendApiKey) {
     console.error('RESEND_API_KEY is missing in .env.local');
